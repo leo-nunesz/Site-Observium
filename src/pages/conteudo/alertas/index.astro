@@ -1,0 +1,220 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getAlertasPublicados } from '../../../utils/content';
+import { formatarData } from '../../../utils/date';
+
+const alertas = await getAlertasPublicados();
+---
+
+<BaseLayout title="Alertas Terapêuticos | Observium UFRJ" description="Base organizada de alertas regulatórios e farmacovigilância sobre medicamentos comercializados no Brasil e no mundo.">
+  <div class="page-header">
+    <div class="container">
+      <span class="badge badge-alert">Farmacovigilância</span>
+      <h1 class="page-title">Alertas Terapêuticos</h1>
+      <p class="page-subtitle">Monitoramento contínuo de decisões e comunicações de segurança emitidas pela ANVISA e agências regulatórias internacionais</p>
+    </div>
+  </div>
+
+  <div class="container page-content">
+    <!-- Aviso Regulatório / Disclaimer -->
+    <div class="disclaimer-banner">
+      <strong>Aviso de Utilidade Pública e Saúde:</strong> Os alertas aqui reunidos têm caráter estritamente informativo e acadêmico, baseados em evidências oficiais. Não substituem o julgamento clínico individualizado de médicos e farmacêuticos, nem autorizam a descontinuação abrupta de medicamentos prescritos sem orientação profissional.
+    </div>
+
+    <!-- Documentos Consolidados Anuais -->
+    <div class="annual-docs-box">
+      <h2 class="annual-title">Compilados Anuais de Alertas (PDFs Históricos)</h2>
+      <p class="annual-desc">Consulte os relatórios consolidados com todos os alertas emitidos nos anos anteriores:</p>
+      <div class="annual-links">
+        <a href="/documents/alertas/Alertas_2025.pdf" class="btn btn-outline btn-sm">Alertas 2025</a>
+        <a href="/documents/alertas/Alertas_2024.pdf" class="btn btn-outline btn-sm">Alertas 2024</a>
+        <a href="/documents/alertas/Alertas_2023.pdf" class="btn btn-outline btn-sm">Alertas 2023</a>
+        <a href="/documents/alertas/Alertas_2022.pdf" class="btn btn-outline btn-sm">Alertas 2022</a>
+        <a href="/documents/alertas/Alertas_2021.pdf" class="btn btn-outline btn-sm">Alertas 2021</a>
+        <a href="/documents/alertas/Alertas_2020.pdf" class="btn btn-outline btn-sm">Alertas 2020</a>
+      </div>
+    </div>
+
+    <!-- Lista de Alertas -->
+    <div class="alertas-list">
+      {alertas.map((alerta) => (
+        <article class="card alerta-item">
+          <div class="alerta-header">
+            <div class="alerta-badges">
+              <span class="badge badge-alert">{alerta.data.autoridade_regulatoria}</span>
+              <span class="badge">{alerta.data.pais}</span>
+              <span class="badge">Ano {alerta.data.ano}</span>
+            </div>
+            <span class="alerta-date">{formatarData(alerta.data.data_publicacao)}</span>
+          </div>
+
+          <h2 class="alerta-title">
+            <a href={`/conteudo/alertas/${alerta.id}`}>
+              {alerta.data.titulo}
+            </a>
+          </h2>
+
+          <div class="alerta-medicamento">
+            <strong>Medicamento(s):</strong> {alerta.data.medicamento}
+          </div>
+
+          <p class="alerta-resumo">
+            {alerta.data.resumo}
+          </p>
+
+          <div class="alerta-footer">
+            {alerta.data.fonte_oficial && (
+              <a href={alerta.data.fonte_oficial} target="_blank" rel="noopener noreferrer" class="external-source">
+                Fonte Oficial &nearr;
+              </a>
+            )}
+            <a href={`/conteudo/alertas/${alerta.id}`} class="btn btn-primary btn-sm">
+              Ver Análise Completa &rarr;
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    color: #ffffff;
+    padding: var(--space-12) 0;
+    margin-bottom: var(--space-8);
+  }
+
+  .page-title {
+    color: #ffffff;
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+
+  .page-subtitle {
+    color: #cbd5e1;
+    font-size: 1.15rem;
+  }
+
+  .page-content {
+    padding-bottom: var(--space-16);
+  }
+
+  .disclaimer-banner {
+    background-color: var(--color-warning-bg);
+    border: 1px solid var(--color-warning-border);
+    color: var(--color-warning-text);
+    padding: var(--space-4) var(--space-6);
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: var(--space-8);
+  }
+
+  .annual-docs-box {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    margin-bottom: var(--space-10);
+  }
+
+  .annual-title {
+    font-size: 1.15rem;
+    margin-bottom: var(--space-2);
+  }
+
+  .annual-desc {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-4);
+  }
+
+  .annual-links {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .alertas-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .alerta-item {
+    border-left: 4px solid var(--color-danger);
+  }
+
+  .alerta-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-3);
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .alerta-badges {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .alerta-date {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+
+  .alerta-title {
+    font-size: 1.35rem;
+    margin-bottom: var(--space-3);
+    line-height: 1.35;
+  }
+
+  .alerta-title a {
+    color: var(--color-primary-dark);
+  }
+
+  .alerta-title a:hover {
+    color: var(--color-primary-light);
+  }
+
+  .alerta-medicamento {
+    background-color: var(--color-primary-soft);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    color: var(--color-primary-dark);
+    margin-bottom: var(--space-3);
+  }
+
+  .alerta-resumo {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-4);
+  }
+
+  .alerta-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border-light);
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .external-source {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  .btn-sm {
+    padding: var(--space-2) var(--space-4);
+    font-size: 0.85rem;
+  }
+</style>

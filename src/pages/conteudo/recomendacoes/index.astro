@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getRecomendacoes } from '../../../utils/content';
+
+const recomendacoes = await getRecomendacoes();
+---
+
+<BaseLayout title="Recomendações Bibliográficas | Observium UFRJ" description="Livros, manuais e diretrizes curadas pela equipe do Observium da Faculdade de Farmácia da UFRJ.">
+  <div class="page-header">
+    <div class="container">
+      <span class="badge">Acervo Bibliográfico</span>
+      <h1 class="page-title">Recomendações Bibliográficas</h1>
+      <p class="page-subtitle">Obras essenciais, diretrizes e relatórios recomendados para estudo e prática em farmácia e saúde pública</p>
+    </div>
+  </div>
+
+  <div class="container page-content">
+    <div class="rec-grid">
+      {recomendacoes.map((rec) => (
+        <article class="card rec-card">
+          <div class="rec-meta">
+            <span class="badge">{rec.data.tipo_material}</span>
+            <span class="rec-year">{rec.data.ano}</span>
+          </div>
+
+          <h2 class="rec-title">{rec.data.titulo}</h2>
+
+          <p class="rec-authors">
+            <strong>Autores / Organização:</strong> {rec.data.autores.join(', ')}
+          </p>
+
+          {rec.data.editora_periodico && (
+            <p class="rec-publisher">
+              <strong>Editora / Periódico:</strong> {rec.data.editora_periodico}
+            </p>
+          )}
+
+          {rec.data.resumo && (
+            <p class="rec-summary">{rec.data.resumo}</p>
+          )}
+
+          <div class="rec-tags">
+            {rec.data.areas.map((area) => (
+              <span class="badge badge-sm">{area}</span>
+            ))}
+          </div>
+
+          <div class="rec-footer mt-auto">
+            {rec.data.doi_link && (
+              <a href={rec.data.doi_link} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+                Acessar Documento &nearr;
+              </a>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    color: #ffffff;
+    padding: var(--space-12) 0;
+    margin-bottom: var(--space-10);
+  }
+
+  .page-title {
+    color: #ffffff;
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+
+  .page-subtitle {
+    color: #cbd5e1;
+    font-size: 1.15rem;
+  }
+
+  .page-content {
+    padding-bottom: var(--space-16);
+  }
+
+  .rec-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: var(--space-8);
+  }
+
+  .rec-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-3);
+  }
+
+  .rec-year {
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+
+  .rec-title {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-3);
+    line-height: 1.4;
+  }
+
+  .rec-authors,
+  .rec-publisher {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-2);
+  }
+
+  .rec-summary {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin-bottom: var(--space-4);
+  }
+
+  .rec-tags {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-4);
+  }
+
+  .badge-sm {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+  }
+
+  .rec-footer {
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .btn-sm {
+    padding: var(--space-2) var(--space-4);
+    font-size: 0.85rem;
+  }
+</style>

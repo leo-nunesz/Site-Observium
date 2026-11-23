@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://observium-ufrj.pages.dev/sitemap-index.xml

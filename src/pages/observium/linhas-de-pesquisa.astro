@@ -1,0 +1,167 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Linhas de Pesquisa | Observium UFRJ" description="Linhas de pesquisa e eixos de investigação científica do Observatório de Vigilância e Uso de Medicamentos da Faculdade de Farmácia da UFRJ.">
+  <div class="page-header">
+    <div class="container">
+      <span class="badge">Pesquisa Científica</span>
+      <h1 class="page-title">Linhas de Pesquisa</h1>
+      <p class="page-subtitle">Área de Concentração: Assistência Farmacêutica e Farmacoepidemiologia</p>
+    </div>
+  </div>
+
+  <div class="container page-content">
+    <div class="research-list">
+      <!-- Linha 1 -->
+      <section class="research-block">
+        <div class="research-num">01</div>
+        <div class="research-body">
+          <h2>Farmacoepidemiologia e Farmacovigilância</h2>
+          <p class="lead">
+            Desenvolver estudos sobre a utilização, efetividade e segurança de medicamentos na população e em serviços de saúde, com ênfase no monitoramento de reações adversas, detecção de sinais de segurança e farmacovigilância ativa e passiva.
+          </p>
+          <div class="research-details">
+            <h3>Objetivos Específicos:</h3>
+            <ul>
+              <li>Monitorar padrões de consumo e tendências temporais de utilização de medicamentos no SUS;</li>
+              <li>Investigar a ocorrência de reações adversas a medicamentos (RAM) e queixas técnicas notificadas em serviços hospitalares e ambulatoriais;</li>
+              <li>Aplicar metodologias analíticas e epidemiológicas para a detecção precoce de sinais de segurança farmacoterapêutica;</li>
+              <li>Avaliar a efetividade comparativa e os desfechos em saúde associados a novas tecnologias farmacêuticas.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Linha 2 -->
+      <section class="research-block">
+        <div class="research-num">02</div>
+        <div class="research-body">
+          <h2>Uso Racional e Segurança do Paciente no Cuidado Farmacêutico</h2>
+          <p class="lead">
+            Investigar práticas clínicas farmacêuticas voltadas à promoção do uso seguro e racional de medicamentos, conciliação medicamentosa, prevenção de erros de medicação e farmacoterapia em populações especiais (pediatria, geriatria e pacientes críticos).
+          </p>
+          <div class="research-details">
+            <h3>Objetivos Específicos:</h3>
+            <ul>
+              <li>Desenvolver e validar estratégias de conciliação medicamentosa em transições do cuidado;</li>
+              <li>Identificar fatores de risco e barreiras para a ocorrência de erros de prescrição, dispensação e administração;</li>
+              <li>Produzir evidências sobre a segurança farmacoterapêutica no paciente pediátrico e neonatal;</li>
+              <li>Desenvolver ferramentas de apoio à decisão clínica e materiais instrucionais para boas práticas de farmácia clínica.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Linha 3 -->
+      <section class="research-block">
+        <div class="research-num">03</div>
+        <div class="research-body">
+          <h2>Políticas Farmacêuticas e Gestão da Assistência Farmacêutica</h2>
+          <p class="lead">
+            Avaliar diretrizes governamentais, modelos de financiamento, incorporação tecnológica, desabastecimento de medicamentos e gestão do ciclo da Assistência Farmacêutica no Sistema Único de Saúde (SUS).
+          </p>
+          <div class="research-details">
+            <h3>Objetivos Específicos:</h3>
+            <ul>
+              <li>Analisar o impacto de políticas públicas e normas sanitárias no acesso e na disponibilidade de medicamentos essenciais;</li>
+              <li>Investigar os determinantes do desabastecimento de insumos farmacêuticos e propor modelos preditivos e gerenciais;</li>
+              <li>Estudar a judicialização da saúde e os desafios da incorporação tecnológica no SUS;</li>
+              <li>Apoiar gestores públicos na qualificação e monitoramento do ciclo da Assistência Farmacêutica.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    color: #ffffff;
+    padding: var(--space-12) 0;
+    margin-bottom: var(--space-10);
+  }
+
+  .page-title {
+    color: #ffffff;
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+
+  .page-subtitle {
+    color: #cbd5e1;
+    font-size: 1.15rem;
+  }
+
+  .page-content {
+    padding-bottom: var(--space-16);
+  }
+
+  .research-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+  }
+
+  .research-block {
+    background: #ffffff;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: var(--space-6);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .research-num {
+    font-family: var(--font-sans);
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--color-primary-light);
+    line-height: 1;
+  }
+
+  .research-body h2 {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-3);
+    color: var(--color-primary-dark);
+  }
+
+  .lead {
+    font-size: 1.1rem;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-4);
+  }
+
+  .research-details {
+    background-color: var(--color-surface);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    border-left: 4px solid var(--color-primary);
+  }
+
+  .research-details h3 {
+    font-size: 1rem;
+    margin-bottom: var(--space-3);
+    color: var(--color-primary-dark);
+  }
+
+  .research-details ul {
+    margin-left: var(--space-6);
+  }
+
+  .research-details li {
+    margin-bottom: var(--space-2);
+    color: var(--color-text-secondary);
+  }
+
+  @media (max-width: 768px) {
+    .research-block {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

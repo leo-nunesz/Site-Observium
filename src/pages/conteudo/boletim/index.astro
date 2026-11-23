@@ -1,0 +1,149 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getBoletinsPublicados } from '../../../utils/content';
+import { formatarData } from '../../../utils/date';
+
+const boletins = await getBoletinsPublicados();
+---
+
+<BaseLayout title="Boletim Observium | UFRJ" description="Acervo completo de edições do Boletim Observium da Faculdade de Farmácia da UFRJ com matérias, análises e PDFs para download.">
+  <div class="page-header">
+    <div class="container">
+      <span class="badge">Publicações Periódicas</span>
+      <h1 class="page-title">Boletim Observium</h1>
+      <p class="page-subtitle">Veículo de divulgação de análises aprofundadas, dados de consumo e reflexões críticas</p>
+    </div>
+  </div>
+
+  <div class="container page-content">
+    <div class="boletins-grid">
+      {boletins.map((b) => (
+        <article class="card boletim-card">
+          <div class="card-meta">
+            <span class="badge">Edição #{b.data.numero_edicao}</span>
+            <span class="card-date">{formatarData(b.data.data_publicacao)}</span>
+          </div>
+
+          <h2 class="card-title">
+            <a href={`/conteudo/boletim/${b.id}`}>
+              {b.data.titulo}
+            </a>
+          </h2>
+
+          <p class="card-excerpt">
+            {b.data.apresentacao}
+          </p>
+
+          <div class="card-footer mt-auto">
+            {b.data.corpo_editorial && (
+              <span class="editorial-team">
+                Corpo Editorial: {b.data.corpo_editorial.join(', ')}
+              </span>
+            )}
+            <div class="card-actions">
+              <a href={`/conteudo/boletim/${b.id}`} class="btn btn-primary btn-sm">
+                Ler Matéria
+              </a>
+              {b.data.arquivo_pdf && (
+                <a href={b.data.arquivo_pdf} download class="btn btn-outline btn-sm">
+                  Baixar PDF
+                </a>
+              )}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    color: #ffffff;
+    padding: var(--space-12) 0;
+    margin-bottom: var(--space-10);
+  }
+
+  .page-title {
+    color: #ffffff;
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+
+  .page-subtitle {
+    color: #cbd5e1;
+    font-size: 1.15rem;
+  }
+
+  .page-content {
+    padding-bottom: var(--space-16);
+  }
+
+  .boletins-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: var(--space-8);
+  }
+
+  .boletim-card {
+    background: #ffffff;
+  }
+
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-3);
+  }
+
+  .card-date {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+
+  .card-title {
+    font-size: 1.35rem;
+    margin-bottom: var(--space-3);
+    line-height: 1.35;
+  }
+
+  .card-title a {
+    color: var(--color-primary-dark);
+  }
+
+  .card-title a:hover {
+    color: var(--color-primary-light);
+  }
+
+  .card-excerpt {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-6);
+  }
+
+  .card-footer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .editorial-team {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+  }
+
+  .card-actions {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .btn-sm {
+    padding: var(--space-2) var(--space-4);
+    font-size: 0.85rem;
+  }
+</style>

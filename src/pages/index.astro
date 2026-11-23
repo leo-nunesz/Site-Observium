@@ -1,0 +1,595 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+  getArtigosPublicados,
+  getBoletinsPublicados,
+  getAlertasPublicados,
+  getEquipeAtiva,
+} from '../utils/content';
+import { formatarData } from '../utils/date';
+
+const artigos = await getArtigosPublicados();
+const boletins = await getBoletinsPublicados();
+const alertas = await getAlertasPublicados();
+const equipe = await getEquipeAtiva();
+
+const boletimDestaque = boletins.find((b) => b.data.destaque) || boletins[0];
+const ultimosAlertas = alertas.slice(0, 3);
+const ultimosBoletins = boletins.slice(0, 3);
+---
+
+<BaseLayout>
+  <!-- Hero Section Institucional -->
+  <section class="hero-section">
+    <div class="container hero-content">
+      <div class="hero-text">
+        <span class="hero-badge">Faculdade de Farmácia • UFRJ</span>
+        <h1 class="hero-title">
+          Observatório de Vigilância e Uso de Medicamentos
+        </h1>
+        <p class="hero-lead">
+          Articulação de ensino, pesquisa e extensão universitária na produção e divulgação de evidências científicas confiáveis sobre farmacovigilância, segurança do paciente e assistência farmacêutica no Brasil.
+        </p>
+        <div class="hero-actions">
+          <a href="/conteudo/boletim" class="btn btn-primary">Acessar Boletins</a>
+          <a href="/observium/quem-somos" class="btn btn-outline-white">Conhecer o Observium</a>
+        </div>
+      </div>
+      <div class="hero-media">
+        <div class="hero-card-brand">
+          <img src="/images/observium-logo-quadrado.jpg" alt="Observium UFRJ" class="hero-logo-img" />
+          <p class="hero-card-caption">
+            Reunindo esforços científicos desde outubro de 2014 a serviço da saúde pública e do SUS.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Destaque Editorial: Boletim Mais Recente -->
+  {boletimDestaque && (
+    <section class="featured-editorial">
+      <div class="container">
+        <div class="editorial-banner">
+          <div class="editorial-tag">
+            <span class="badge">Destaque Editorial</span>
+            <span class="editorial-edition">Edição Nº {boletimDestaque.data.numero_edicao}</span>
+          </div>
+          <h2 class="editorial-title">
+            <a href={`/conteudo/boletim/${boletimDestaque.id}`}>
+              {boletimDestaque.data.titulo}
+            </a>
+          </h2>
+          <p class="editorial-excerpt">
+            {boletimDestaque.data.apresentacao}
+          </p>
+          <div class="editorial-footer">
+            <span class="editorial-date">Publicado em {formatarData(boletimDestaque.data.data_publicacao)}</span>
+            <a href={`/conteudo/boletim/${boletimDestaque.id}`} class="btn btn-primary btn-sm">
+              Ler Edição Completa &rarr;
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Seção: Alertas Terapêuticos Recentes -->
+  <section class="section-home bg-surface">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="section-kicker">Monitoramento Regulatório</span>
+          <h2 class="section-title">Alertas Terapêuticos</h2>
+        </div>
+        <a href="/conteudo/alertas" class="view-all-link">Ver todos os alertas &rarr;</a>
+      </div>
+
+      <div class="grid-cards">
+        {ultimosAlertas.map((alerta) => (
+          <article class="card card-alert">
+            <div class="card-meta">
+              <span class="badge badge-alert">{alerta.data.autoridade_regulatoria}</span>
+              <span class="card-date">{formatarData(alerta.data.data_publicacao)}</span>
+            </div>
+            <h3 class="card-title">
+              <a href={`/conteudo/alertas/${alerta.id}`}>
+                {alerta.data.titulo}
+              </a>
+            </h3>
+            <p class="card-medicamento">
+              <strong>Medicamento:</strong> {alerta.data.medicamento}
+            </p>
+            <p class="card-excerpt">
+              {alerta.data.resumo}
+            </p>
+            <div class="card-footer mt-auto">
+              <span class="card-country">País: {alerta.data.pais}</span>
+              <a href={`/conteudo/alertas/${alerta.id}`} class="card-link">Detalhes &rarr;</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção: Boletins Informativos -->
+  <section class="section-home">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="section-kicker">Divulgação Periódica</span>
+          <h2 class="section-title">Boletim Observium</h2>
+        </div>
+        <a href="/conteudo/boletim" class="view-all-link">Ver acervo completo &rarr;</a>
+      </div>
+
+      <div class="grid-cards">
+        {ultimosBoletins.map((b) => (
+          <article class="card">
+            <div class="card-meta">
+              <span class="badge">Edição #{b.data.numero_edicao}</span>
+              <span class="card-date">{formatarData(b.data.data_publicacao)}</span>
+            </div>
+            <h3 class="card-title">
+              <a href={`/conteudo/boletim/${b.id}`}>
+                {b.data.titulo}
+              </a>
+            </h3>
+            <p class="card-excerpt">
+              {b.data.apresentacao}
+            </p>
+            <div class="card-footer mt-auto">
+              <a href={`/conteudo/boletim/${b.id}`} class="btn btn-outline btn-sm">
+                Acessar Matéria
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção: Linhas de Pesquisa -->
+  <section class="section-home bg-surface">
+    <div class="container">
+      <div class="section-header text-center-header">
+        <span class="section-kicker">Eixos de Atuação Científica</span>
+        <h2 class="section-title">Linhas de Pesquisa</h2>
+        <p class="section-sub">Produção de conhecimento rigoroso voltado à resolução de problemas reais de saúde pública</p>
+      </div>
+
+      <div class="grid-cards-3">
+        <div class="card research-card">
+          <div class="research-icon">01</div>
+          <h3>Farmacoepidemiologia e Farmacovigilância</h3>
+          <p>
+            Estudos populacionais sobre o perfil de consumo, efetividade e segurança de medicamentos, monitoramento ativo e passivo de reações adversas e detecção precoce de sinais de risco.
+          </p>
+        </div>
+
+        <div class="card research-card">
+          <div class="research-icon">02</div>
+          <h3>Uso Racional e Segurança do Paciente</h3>
+          <p>
+            Investigação de intervenções clínicas farmacêuticas, conciliação de medicamentos no ambiente hospitalar, prevenção de erros e cuidado a populações especiais (pediatria e geriatria).
+          </p>
+        </div>
+
+        <div class="card research-card">
+          <div class="research-icon">03</div>
+          <h3>Políticas e Gestão da Assistência Farmacêutica</h3>
+          <p>
+            Avaliação de diretrizes governamentais, financiamento público, modelos de incorporação tecnológica em saúde e estratégias de enfrentamento ao desabastecimento de medicamentos no SUS.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção: Equipe Docente e Pesquisadores -->
+  <section class="section-home">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="section-kicker">Corpo Acadêmico</span>
+          <h2 class="section-title">Equipe do Observium</h2>
+        </div>
+        <a href="/observium/equipe" class="view-all-link">Conhecer toda a equipe &rarr;</a>
+      </div>
+
+      <div class="grid-team">
+        {equipe.slice(0, 4).map((membro) => (
+          <div class="team-card">
+            <div class="team-avatar-placeholder">
+              <span>{membro.data.nome.charAt(0)}</span>
+            </div>
+            <h4 class="team-name">{membro.data.nome}</h4>
+            <p class="team-role">{membro.data.cargo}</p>
+            <p class="team-degree">{membro.data.titulacao}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Hero */
+  .hero-section {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    color: #ffffff;
+    padding: var(--space-16) 0;
+  }
+
+  .hero-content {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: var(--space-12);
+    align-items: center;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    padding: var(--space-1) var(--space-3);
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-4);
+  }
+
+  .hero-title {
+    color: #ffffff;
+    font-size: clamp(2.2rem, 4vw, 3rem);
+    margin-bottom: var(--space-6);
+  }
+
+  .hero-lead {
+    color: #e2e8f0;
+    font-size: 1.125rem;
+    line-height: 1.7;
+    margin-bottom: var(--space-8);
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .btn-outline-white {
+    background-color: transparent;
+    color: #ffffff !important;
+    border: 2px solid #ffffff;
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-md);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+  }
+
+  .btn-outline-white:hover {
+    background-color: #ffffff;
+    color: var(--color-primary-dark) !important;
+  }
+
+  .hero-media {
+    display: flex;
+    justify-content: center;
+  }
+
+  .hero-card-brand {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    text-align: center;
+    max-width: 380px;
+  }
+
+  .hero-logo-img {
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
+    background: #ffffff;
+    border-radius: var(--radius-md);
+    padding: 0.5rem;
+    margin: 0 auto var(--space-4);
+    box-shadow: var(--shadow-md);
+  }
+
+  .hero-card-caption {
+    font-size: 0.9rem;
+    color: #cbd5e1;
+    line-height: 1.5;
+    margin-bottom: 0;
+  }
+
+  /* Destaque Editorial */
+  .featured-editorial {
+    margin-top: -30px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .editorial-banner {
+    background: #ffffff;
+    border: 2px solid var(--color-primary-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .editorial-tag {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .editorial-edition {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--color-primary);
+  }
+
+  .editorial-title {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-3);
+  }
+
+  .editorial-title a {
+    color: var(--color-primary-dark);
+  }
+
+  .editorial-title a:hover {
+    color: var(--color-primary-light);
+  }
+
+  .editorial-excerpt {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-4);
+  }
+
+  .editorial-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .editorial-date {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+
+  /* Seções Comuns */
+  .section-home {
+    padding: var(--space-16) 0;
+  }
+
+  .bg-surface {
+    background-color: var(--color-surface);
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: var(--space-10);
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .text-center-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .section-kicker {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-primary-light);
+    margin-bottom: var(--space-1);
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .section-sub {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    max-width: 650px;
+    margin-top: var(--space-2);
+  }
+
+  .view-all-link {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--color-primary);
+  }
+
+  /* Grid Cards */
+  .grid-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-6);
+  }
+
+  .grid-cards-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-6);
+  }
+
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-3);
+  }
+
+  .card-date {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+  }
+
+  .card-title {
+    font-size: 1.15rem;
+    margin-bottom: var(--space-3);
+    line-height: 1.35;
+  }
+
+  .card-title a {
+    color: var(--color-primary-dark);
+  }
+
+  .card-title a:hover {
+    color: var(--color-primary-light);
+  }
+
+  .card-medicamento {
+    font-size: 0.875rem;
+    color: var(--color-primary-dark);
+    background-color: var(--color-primary-soft);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-3);
+  }
+
+  .card-excerpt {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin-bottom: var(--space-4);
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border-light);
+    font-size: 0.85rem;
+  }
+
+  .card-country {
+    color: var(--color-text-muted);
+  }
+
+  .card-link {
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  .mt-auto {
+    margin-top: auto;
+  }
+
+  .btn-sm {
+    padding: var(--space-2) var(--space-4);
+    font-size: 0.85rem;
+  }
+
+  /* Linhas de Pesquisa */
+  .research-card {
+    border-top: 4px solid var(--color-primary);
+    position: relative;
+    padding-top: var(--space-8);
+  }
+
+  .research-icon {
+    font-family: var(--font-sans);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--color-primary-light);
+    margin-bottom: var(--space-2);
+  }
+
+  .research-card h3 {
+    margin-bottom: var(--space-3);
+  }
+
+  /* Equipe Grid */
+  .grid-team {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--space-6);
+  }
+
+  .team-card {
+    background: #ffffff;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .team-avatar-placeholder {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-full);
+    background-color: var(--color-primary-soft);
+    color: var(--color-primary);
+    font-family: var(--font-sans);
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-4);
+  }
+
+  .team-name {
+    font-size: 1.05rem;
+    margin-bottom: var(--space-1);
+  }
+
+  .team-role {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: var(--space-1);
+  }
+
+  .team-degree {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    line-height: 1.4;
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 900px) {
+    .hero-content {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+
+    .hero-actions {
+      justify-content: center;
+    }
+
+    .hero-media {
+      display: none;
+    }
+  }
+</style>

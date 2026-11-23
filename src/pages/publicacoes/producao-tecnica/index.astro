@@ -1,0 +1,134 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getProducaoTecnica } from '../../../utils/content';
+
+const producoes = await getProducaoTecnica();
+---
+
+<BaseLayout title="Produção Técnica | Observium UFRJ" description="Livros, manuais, notas técnicas e relatórios elaborados pela equipe do Observium da Faculdade de Farmácia da UFRJ.">
+  <div class="page-header">
+    <div class="container">
+      <span class="badge">Produção Técnica</span>
+      <h1 class="page-title">Produção Técnica da Equipe</h1>
+      <p class="page-subtitle">Manuais operacionais, livros e guias clínicos para apoio ao cuidado farmacêutico e às políticas de saúde</p>
+    </div>
+  </div>
+
+  <div class="container page-content">
+    <div class="prod-grid">
+      {producoes.map((prod) => (
+        <article class="card prod-card">
+          <div class="prod-header">
+            <span class="badge">{prod.data.tipo}</span>
+            <span class="prod-year">{prod.data.ano}</span>
+          </div>
+
+          <h2 class="prod-title">{prod.data.titulo}</h2>
+
+          <p class="prod-authors">
+            <strong>Autores:</strong> {prod.data.autores.join('; ')}
+          </p>
+
+          {prod.data.editora && (
+            <p class="prod-editora">
+              <strong>Publicação:</strong> {prod.data.editora}
+            </p>
+          )}
+
+          {prod.data.resumo && (
+            <p class="prod-resumo">{prod.data.resumo}</p>
+          )}
+
+          <div class="prod-footer mt-auto">
+            {prod.data.link_externo && (
+              <a href={prod.data.link_externo} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+                Acessar Publicação &nearr;
+              </a>
+            )}
+            {prod.data.arquivo_pdf && (
+              <a href={prod.data.arquivo_pdf} download class="btn btn-outline btn-sm">
+                Baixar PDF
+              </a>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    color: #ffffff;
+    padding: var(--space-12) 0;
+    margin-bottom: var(--space-10);
+  }
+
+  .page-title {
+    color: #ffffff;
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+
+  .page-subtitle {
+    color: #cbd5e1;
+    font-size: 1.15rem;
+  }
+
+  .page-content {
+    padding-bottom: var(--space-16);
+  }
+
+  .prod-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: var(--space-8);
+  }
+
+  .prod-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-2);
+  }
+
+  .prod-year {
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+
+  .prod-title {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-3);
+    line-height: 1.4;
+  }
+
+  .prod-authors,
+  .prod-editora {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-2);
+  }
+
+  .prod-resumo {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-top: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+
+  .prod-footer {
+    display: flex;
+    gap: var(--space-2);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border-light);
+    flex-wrap: wrap;
+  }
+
+  .btn-sm {
+    padding: var(--space-2) var(--space-4);
+    font-size: 0.85rem;
+  }
+</style>

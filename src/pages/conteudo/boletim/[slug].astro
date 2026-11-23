@@ -1,0 +1,213 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { formatarData } from '../../../utils/date';
+
+export async function getStaticPaths() {
+  const boletins = await getCollection('boletins');
+  return boletins.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<BaseLayout
+  title={`Boletim #${entry.data.numero_edicao}: ${entry.data.titulo} | Observium UFRJ`}
+  description={entry.data.apresentacao}
+>
+  <article class="article-container">
+    <header class="article-header">
+      <div class="container header-inner">
+        <a href="/conteudo/boletim" class="back-link">&larr; Voltar para todos os boletins</a>
+        <div class="meta-row">
+          <span class="badge">Edição #{entry.data.numero_edicao}</span>
+          <span class="article-date">Publicado em {formatarData(entry.data.data_publicacao)}</span>
+        </div>
+        <h1 class="article-title">{entry.data.titulo}</h1>
+        <p class="article-lead">{entry.data.apresentacao}</p>
+
+        {entry.data.arquivo_pdf && (
+          <div class="pdf-banner">
+            <div>
+              <strong>Documento Completo Disponível</strong>
+              <p class="pdf-desc">Faça o download do boletim diagramado para leitura offline e compartilhamento institucional.</p>
+            </div>
+            <a href={entry.data.arquivo_pdf} download class="btn btn-primary btn-sm">
+              Baixar PDF Oficial &darr;
+            </a>
+          </div>
+        )}
+      </div>
+    </header>
+
+    <div class="container article-body-container">
+      <div class="article-content prose">
+        <Content />
+      </div>
+
+      <aside class="article-sidebar">
+        <div class="sidebar-box">
+          <h3 class="sidebar-title">Corpo Editorial</h3>
+          <ul class="sidebar-list">
+            {entry.data.corpo_editorial.map((editor) => (
+              <li>{editor}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="sidebar-box">
+          <h3 class="sidebar-title">Como Citar</h3>
+          <p class="citation-text">
+            OBSERVIUM. {entry.data.titulo}. <em>Boletim Observium</em>, Rio de Janeiro, Faculdade de Farmácia da UFRJ, n. {entry.data.numero_edicao}, {entry.data.data_publicacao.getFullYear()}.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .article-header {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    color: #ffffff;
+    padding: var(--space-12) 0;
+    margin-bottom: var(--space-12);
+  }
+
+  .header-inner {
+    max-width: 900px;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: var(--space-4);
+  }
+
+  .back-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+  }
+
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .article-date {
+    font-size: 0.85rem;
+    color: #cbd5e1;
+  }
+
+  .article-title {
+    color: #ffffff;
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    line-height: 1.25;
+    margin-bottom: var(--space-4);
+  }
+
+  .article-lead {
+    color: #e2e8f0;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    margin-bottom: var(--space-6);
+  }
+
+  .pdf-banner {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: var(--radius-md);
+    padding: var(--space-4) var(--space-6);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .pdf-desc {
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    margin-bottom: 0;
+  }
+
+  .article-body-container {
+    display: grid;
+    grid-template-columns: 2.2fr 1fr;
+    gap: var(--space-12);
+    padding-bottom: var(--space-16);
+  }
+
+  .article-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+  }
+
+  .article-content :global(h2) {
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-4);
+    font-size: 1.5rem;
+    color: var(--color-primary-dark);
+  }
+
+  .article-content :global(p) {
+    margin-bottom: var(--space-4);
+  }
+
+  .article-content :global(ul) {
+    margin-left: var(--space-6);
+    margin-bottom: var(--space-4);
+  }
+
+  .article-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .sidebar-box {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+  }
+
+  .sidebar-title {
+    font-size: 1rem;
+    margin-bottom: var(--space-3);
+    color: var(--color-primary-dark);
+    padding-bottom: var(--space-2);
+    border-bottom: 2px solid var(--color-primary-soft);
+  }
+
+  .sidebar-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+  }
+
+  .citation-text {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 850px) {
+    .article-body-container {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

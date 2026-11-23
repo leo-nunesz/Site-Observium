@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getEntrevistas } from '../../../utils/content';
+import { formatarData } from '../../../utils/date';
+
+const entrevistas = await getEntrevistas();
+---
+
+<BaseLayout title="Entrevistas e Mídia | Observium UFRJ" description="Entrevistas, painéis e debates com pesquisadores e referências da área de vigilância e saúde pública.">
+  <div class="page-header">
+    <div class="container">
+      <span class="badge">Mídia & Debates</span>
+      <h1 class="page-title">Entrevistas e Eventos</h1>
+      <p class="page-subtitle">Diálogos com especialistas, cobertura de conferências e debates sobre os desafios da assistência farmacêutica</p>
+    </div>
+  </div>
+
+  <div class="container page-content">
+    <div class="entrevistas-list">
+      {entrevistas.map((item) => (
+        <article class="card entrevista-card">
+          <div class="entrevista-meta">
+            {item.data.veiculo && <span class="badge">{item.data.veiculo}</span>}
+            <span class="entrevista-date">{formatarData(item.data.data)}</span>
+          </div>
+
+          <h2 class="entrevista-title">{item.data.titulo}</h2>
+
+          <p class="entrevista-guest">
+            <strong>Entrevistado(a):</strong> {item.data.entrevistado}
+          </p>
+
+          <p class="entrevista-desc">{item.data.descricao}</p>
+
+          <div class="entrevista-footer mt-auto">
+            {item.data.link_video && (
+              <a href={item.data.link_video} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+                Assistir no YouTube &nearr;
+              </a>
+            )}
+            {item.data.link_externo && (
+              <a href={item.data.link_externo} target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+                Acessar Matéria Completa
+              </a>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    color: #ffffff;
+    padding: var(--space-12) 0;
+    margin-bottom: var(--space-10);
+  }
+
+  .page-title {
+    color: #ffffff;
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+
+  .page-subtitle {
+    color: #cbd5e1;
+    font-size: 1.15rem;
+  }
+
+  .page-content {
+    padding-bottom: var(--space-16);
+  }
+
+  .entrevistas-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: var(--space-8);
+  }
+
+  .entrevista-card {
+    background: #ffffff;
+  }
+
+  .entrevista-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-3);
+  }
+
+  .entrevista-date {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+
+  .entrevista-title {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-3);
+    line-height: 1.4;
+  }
+
+  .entrevista-guest {
+    font-size: 0.9rem;
+    color: var(--color-primary);
+    margin-bottom: var(--space-3);
+  }
+
+  .entrevista-desc {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-6);
+  }
+
+  .entrevista-footer {
+    display: flex;
+    gap: var(--space-2);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border-light);
+    flex-wrap: wrap;
+  }
+
+  .btn-sm {
+    padding: var(--space-2) var(--space-4);
+    font-size: 0.85rem;
+  }
+</style>

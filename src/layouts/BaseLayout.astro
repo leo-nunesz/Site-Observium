@@ -1,0 +1,83 @@
+---
+import Header from '../components/common/Header.astro';
+import Footer from '../components/common/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonicalURL?: string;
+}
+
+const {
+  title = 'Observium UFRJ | Observatório de Vigilância e Uso de Medicamentos',
+  description = 'Observatório de Vigilância e Uso de Medicamentos da Faculdade de Farmácia da Universidade Federal do Rio de Janeiro (UFRJ). Informações científicas confiáveis sobre farmacovigilância e uso racional.',
+  image = '/images/observium-logo-quadrado.jpg',
+  canonicalURL = Astro.url.href,
+} = Astro.props;
+
+const siteTitle = title.includes('Observium') ? title : `${title} | Observium UFRJ`;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/jpeg" href="/images/observium-logo-quadrado.jpg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO Básico -->
+    <title>{siteTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph / Redes Sociais -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="Observium UFRJ" />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@observiumufrj" />
+    <meta name="twitter:title" content={siteTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+
+    <!-- Google Fonts com preconnect performático -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Acessibilidade: Skip Nav -->
+    <a href="#conteudo-principal" class="skip-link">Pular para o conteúdo principal</a>
+
+    <!-- Cabeçalho -->
+    <Header currentPath={Astro.url.pathname} />
+
+    <!-- Conteúdo Principal -->
+    <main id="conteudo-principal" data-pagefind-body>
+      <slot />
+    </main>
+
+    <!-- Rodapé -->
+    <Footer />
+  </body>
+</html>
+
+<style>
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+</style>

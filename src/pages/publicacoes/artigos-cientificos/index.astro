@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getPublicacoesCientificas } from '../../../utils/content';
+
+const publicacoes = await getPublicacoesCientificas();
+---
+
+<BaseLayout title="Artigos Científicos da Equipe | Observium UFRJ" description="Produção científica de docentes e pesquisadores do Observium publicada em periódicos nacionais e internacionais.">
+  <div class="page-header">
+    <div class="container">
+      <span class="badge">Produção Acadêmica</span>
+      <h1 class="page-title">Artigos Científicos</h1>
+      <p class="page-subtitle">Acervo de artigos originais, revisões e estudos de farmacoepidemiologia publicados em periódicos indexados</p>
+    </div>
+  </div>
+
+  <div class="container page-content">
+    <div class="articles-list">
+      {publicacoes.map((artigo) => (
+        <article class="card article-pub-item">
+          <div class="pub-header">
+            <span class="badge">{artigo.data.tipo}</span>
+            <span class="pub-year">{artigo.data.ano}</span>
+          </div>
+
+          <h2 class="pub-title">{artigo.data.titulo}</h2>
+
+          <p class="pub-authors">
+            <strong>Autores:</strong> {artigo.data.autores.join('; ')}
+          </p>
+
+          <p class="pub-journal">
+            <strong>Periódico:</strong> <em>{artigo.data.periodico}</em> ({artigo.data.ano})
+          </p>
+
+          {artigo.data.resumo && (
+            <p class="pub-abstract">{artigo.data.resumo}</p>
+          )}
+
+          <div class="pub-footer mt-auto">
+            {artigo.data.doi && (
+              <span class="pub-doi">DOI: {artigo.data.doi}</span>
+            )}
+            {artigo.data.link_externo && (
+              <a href={artigo.data.link_externo} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+                Acessar Periódico &nearr;
+              </a>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    color: #ffffff;
+    padding: var(--space-12) 0;
+    margin-bottom: var(--space-10);
+  }
+
+  .page-title {
+    color: #ffffff;
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+
+  .page-subtitle {
+    color: #cbd5e1;
+    font-size: 1.15rem;
+  }
+
+  .page-content {
+    padding-bottom: var(--space-16);
+  }
+
+  .articles-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .article-pub-item {
+    border-left: 4px solid var(--color-primary);
+  }
+
+  .pub-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-2);
+  }
+
+  .pub-year {
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+
+  .pub-title {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-3);
+    line-height: 1.4;
+    color: var(--color-primary-dark);
+  }
+
+  .pub-authors,
+  .pub-journal {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-2);
+  }
+
+  .pub-abstract {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-top: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+
+  .pub-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border-light);
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .pub-doi {
+    font-size: 0.85rem;
+    font-family: monospace;
+    color: var(--color-text-muted);
+  }
+
+  .btn-sm {
+    padding: var(--space-2) var(--space-4);
+    font-size: 0.85rem;
+  }
+</style>

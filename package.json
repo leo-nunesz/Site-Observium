@@ -1,0 +1,28 @@
+{
+  "name": "observium-ufrj",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build && pagefind --site dist",
+    "build:astro": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "keywords": [
+    "observium",
+    "ufrj",
+    "farmacia",
+    "farmacovigilancia",
+    "medicamentos"
+  ],
+  "author": "Observium UFRJ",
+  "license": "CC-BY-4.0",
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.6",
+    "astro": "^7.4.13",
+    "pagefind": "^1.6.0",
+    "typescript": "^7.0.2"
+  }
+}

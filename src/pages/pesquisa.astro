@@ -1,0 +1,93 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Pesquisa no Portal | Observium UFRJ" description="Busca textual instantânea em boletins, alertas terapêuticos, artigos científicos e entrevistas do Observium UFRJ.">
+  <div class="page-header">
+    <div class="container">
+      <span class="badge">Localizador Geral</span>
+      <h1 class="page-title">Pesquisar no Observium</h1>
+      <p class="page-subtitle">Encontre artigos, boletins informativos, alertas terapêuticos e publicações científicas</p>
+    </div>
+  </div>
+
+  <div class="container page-content">
+    <div class="search-box-wrapper">
+      <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+      <div id="search"></div>
+    </div>
+  </div>
+
+  <script is:inline src="/pagefind/pagefind-ui.js"></script>
+  <script is:inline>
+    window.addEventListener('DOMContentLoaded', () => {
+      if (typeof PagefindUI !== 'undefined') {
+        new PagefindUI({
+          element: '#search',
+          showSubResults: true,
+          excerptLength: 20,
+          showImages: false,
+          translations: {
+            placeholder: 'Digite para pesquisar medicamentos, boletins, autores...',
+            clear_search: 'Limpar',
+            load_more: 'Carregar mais resultados',
+            search_label: 'Pesquisar neste portal',
+            filters_label: 'Filtros',
+            zero_results: 'Nenhum resultado encontrado para "[SEARCH_TERM]"',
+            many_results: '[COUNT] resultados encontrados para "[SEARCH_TERM]"',
+            one_result: '1 resultado encontrado para "[SEARCH_TERM]"',
+            alt_search: 'Não encontramos resultados para "[SEARCH_TERM]". Mostrando resultados para "[DIFFERENT_TERM]"',
+            search_suggestion: 'Você quis dizer "[SEARCH_TERM]"?',
+            searching: 'Pesquisando...',
+          },
+        });
+      }
+    });
+  </script>
+</BaseLayout>
+
+<style>
+  .page-header {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    color: #ffffff;
+    padding: var(--space-12) 0;
+    margin-bottom: var(--space-8);
+  }
+
+  .page-title {
+    color: #ffffff;
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+
+  .page-subtitle {
+    color: #cbd5e1;
+    font-size: 1.15rem;
+  }
+
+  .page-content {
+    padding-bottom: var(--space-16);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .search-box-wrapper {
+    background: #ffffff;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Customização de cores do Pagefind com a paleta oficial da UFRJ */
+  :global(.pagefind-ui) {
+    --pagefind-ui-scale: 0.95;
+    --pagefind-ui-primary: #003366;
+    --pagefind-ui-text: #0f172a;
+    --pagefind-ui-background: #ffffff;
+    --pagefind-ui-border: #cbd5e1;
+    --pagefind-ui-tag: #eaf2f8;
+    --pagefind-ui-border-radius: 8px;
+    --pagefind-ui-font: 'Inter', system-ui, sans-serif;
+  }
+</style>

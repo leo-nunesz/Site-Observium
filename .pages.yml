@@ -1,0 +1,428 @@
+# Configuração do Pages CMS para o Observium UFRJ
+# Documentação: https://pagescms.org/docs/
+
+media:
+  folder: public/images
+  public: /images
+
+collections:
+  - name: artigos
+    label: Artigos do Portal
+    type: collection
+    path: src/content/artigos
+    format: frontmatter
+    view:
+      fields: [titulo, categoria, data_publicacao, status]
+      primary: titulo
+    fields:
+      - name: titulo
+        label: Título do Artigo
+        type: string
+        required: true
+      - name: subtitulo
+        label: Subtítulo
+        type: string
+      - name: autor
+        label: Autor / Autores
+        type: string
+        default: Equipe Observium
+        required: true
+      - name: data_publicacao
+        label: Data de Publicação
+        type: date
+        required: true
+      - name: categoria
+        label: Categoria
+        type: select
+        options:
+          - Boletim
+          - Alerta
+          - Institucional
+          - Opinião
+          - Educação
+        required: true
+      - name: imagem_capa
+        label: Imagem de Capa
+        type: image
+      - name: resumo
+        label: Resumo (máx. 350 caracteres)
+        type: text
+        required: true
+      - name: palavras_chave
+        label: Palavras-chave
+        type: list
+      - name: status
+        label: Status Editorial
+        type: select
+        options:
+          - rascunho
+          - em-revisao
+          - aprovado
+          - publicado
+        default: rascunho
+        required: true
+      - name: destaque
+        label: Exibir em Destaque na Homepage?
+        type: boolean
+        default: false
+      - name: referencias
+        label: Referências Bibliográficas
+        type: text
+      - name: body
+        label: Conteúdo do Artigo (Markdown)
+        type: rich-text
+
+  - name: boletins
+    label: Boletins Observium
+    type: collection
+    path: src/content/boletins
+    format: frontmatter
+    view:
+      fields: [numero_edicao, titulo, data_publicacao, status]
+      primary: titulo
+    fields:
+      - name: numero_edicao
+        label: Número da Edição (ex: 12)
+        type: number
+        required: true
+      - name: titulo
+        label: Tema / Título da Edição
+        type: string
+        required: true
+      - name: apresentacao
+        label: Texto de Apresentação / Editorial
+        type: text
+        required: true
+      - name: data_publicacao
+        label: Data de Publicação
+        type: date
+        required: true
+      - name: imagem_capa
+        label: Imagem de Capa do Boletim
+        type: image
+      - name: arquivo_pdf
+        label: Arquivo PDF (ou link de download)
+        type: file
+      - name: corpo_editorial
+        label: Corpo Editorial Responsável
+        type: list
+      - name: status
+        label: Status Editorial
+        type: select
+        options:
+          - rascunho
+          - em-revisao
+          - aprovado
+          - publicado
+        default: publicado
+        required: true
+      - name: destaque
+        label: Edição Mais Recente (Destaque)?
+        type: boolean
+        default: false
+      - name: body
+        label: Conteúdo / Matérias da Edição
+        type: rich-text
+
+  - name: alertas
+    label: Alertas Terapêuticos
+    type: collection
+    path: src/content/alertas
+    format: frontmatter
+    view:
+      fields: [titulo, medicamento, autoridade_regulatoria, ano, status]
+      primary: titulo
+    fields:
+      - name: titulo
+        label: Título do Alerta
+        type: string
+        required: true
+      - name: medicamento
+        label: Medicamento(s) Relacionado(s)
+        type: string
+        required: true
+      - name: autoridade_regulatoria
+        label: Autoridade Regulatória (ex: ANVISA, FDA, Medsafe, EMA, ISP)
+        type: string
+        required: true
+      - name: pais
+        label: País de Origem
+        type: string
+        required: true
+      - name: data_publicacao
+        label: Data de Publicação Oficial
+        type: date
+        required: true
+      - name: ano
+        label: Ano do Alerta (para filtros)
+        type: number
+        required: true
+      - name: resumo
+        label: Resumo Executivo
+        type: text
+        required: true
+      - name: fonte_oficial
+        label: Link da Fonte Oficial / Decisão
+        type: string
+      - name: referencias
+        label: Referências Bibliográficas
+        type: text
+      - name: aviso_disclaimer
+        label: Exibir Aviso Legal Informativo?
+        type: boolean
+        default: true
+      - name: status
+        label: Status Editorial
+        type: select
+        options:
+          - rascunho
+          - em-revisao
+          - aprovado
+          - publicado
+        default: publicado
+        required: true
+      - name: body
+        label: Conteúdo Completo do Alerta
+        type: rich-text
+
+  - name: publicacoes
+    label: Artigos Científicos da Equipe
+    type: collection
+    path: src/content/publicacoes
+    format: frontmatter
+    view:
+      fields: [titulo, periodico, ano, status]
+      primary: titulo
+    fields:
+      - name: titulo
+        label: Título do Artigo Científico
+        type: string
+        required: true
+      - name: autores
+        label: Lista de Autores
+        type: list
+        required: true
+      - name: periodico
+        label: Nome do Periódico / Revista
+        type: string
+        required: true
+      - name: ano
+        label: Ano de Publicação
+        type: number
+        required: true
+      - name: doi
+        label: Código DOI (ex: 10.1016/...)
+        type: string
+      - name: link_externo
+        label: Link Externo para Acesso ao Artigo
+        type: string
+      - name: tipo
+        label: Tipo de Publicação
+        type: select
+        options:
+          - artigo-original
+          - revisao
+          - carta
+          - editorial
+          - outro
+        default: artigo-original
+      - name: status
+        label: Status
+        type: select
+        options:
+          - rascunho
+          - publicado
+        default: publicado
+
+  - name: producao-tecnica
+    label: Produção Técnica
+    type: collection
+    path: src/content/producao-tecnica
+    format: frontmatter
+    view:
+      fields: [titulo, tipo, ano]
+      primary: titulo
+    fields:
+      - name: titulo
+        label: Título da Produção Técnica
+        type: string
+        required: true
+      - name: autores
+        label: Autores
+        type: list
+        required: true
+      - name: tipo
+        label: Tipo
+        type: select
+        options:
+          - livro
+          - manual
+          - relatorio
+          - nota-tecnica
+          - posicionamento
+          - entrevista
+          - outro
+        required: true
+      - name: ano
+        label: Ano
+        type: number
+        required: true
+      - name: editora
+        label: Editora / Instituição Publicadora
+        type: string
+      - name: link_externo
+        label: Link Externo
+        type: string
+      - name: arquivo_pdf
+        label: Arquivo PDF
+        type: file
+      - name: resumo
+        label: Resumo
+        type: text
+      - name: status
+        label: Status
+        type: select
+        options:
+          - rascunho
+          - publicado
+        default: publicado
+
+  - name: recomendacoes
+    label: Recomendações Bibliográficas
+    type: collection
+    path: src/content/recomendacoes
+    format: frontmatter
+    view:
+      fields: [titulo, ano, tipo_material]
+      primary: titulo
+    fields:
+      - name: titulo
+        label: Título da Obra Recomendada
+        type: string
+        required: true
+      - name: autores
+        label: Autores
+        type: list
+        required: true
+      - name: tipo_material
+        label: Tipo de Material
+        type: select
+        options:
+          - livro
+          - artigo
+          - guia
+          - manual
+          - relatorio
+          - outro
+        required: true
+      - name: ano
+        label: Ano
+        type: number
+        required: true
+      - name: editora_periodico
+        label: Editora ou Periódico
+        type: string
+      - name: doi_link
+        label: Link DOI ou de Acesso
+        type: string
+      - name: resumo
+        label: Comentário / Resumo da Recomendação
+        type: text
+      - name: areas
+        label: Áreas Temáticas
+        type: list
+      - name: status
+        label: Status
+        type: select
+        options:
+          - rascunho
+          - publicado
+        default: publicado
+
+  - name: entrevistas
+    label: Entrevistas e Mídia
+    type: collection
+    path: src/content/entrevistas
+    format: frontmatter
+    view:
+      fields: [titulo, entrevistado, data]
+      primary: titulo
+    fields:
+      - name: titulo
+        label: Título
+        type: string
+        required: true
+      - name: entrevistado
+        label: Entrevistado(a)
+        type: string
+        required: true
+      - name: entrevistador
+        label: Entrevistador(a) / Veículo
+        type: string
+      - name: descricao
+        label: Descrição do Conteúdo
+        type: text
+        required: true
+      - name: data
+        label: Data
+        type: date
+        required: true
+      - name: veiculo
+        label: Veículo de Imprensa
+        type: string
+      - name: link_video
+        label: Link de Vídeo (YouTube embed)
+        type: string
+      - name: link_externo
+        label: Link Externo
+        type: string
+      - name: status
+        label: Status
+        type: select
+        options:
+          - rascunho
+          - publicado
+        default: publicado
+
+  - name: equipe
+    label: Equipe do Observium
+    type: collection
+    path: src/content/equipe
+    format: frontmatter
+    view:
+      fields: [nome, cargo, ordem, ativo]
+      primary: nome
+    fields:
+      - name: nome
+        label: Nome Completo
+        type: string
+        required: true
+      - name: cargo
+        label: Cargo / Função
+        type: string
+        required: true
+      - name: titulacao
+        label: Titulação Acadêmica
+        type: string
+        required: true
+      - name: area_atuacao
+        label: Áreas de Atuação
+        type: list
+        required: true
+      - name: foto
+        label: Foto do Perfil
+        type: image
+      - name: lattes
+        label: Link do Currículo Lattes
+        type: string
+      - name: email
+        label: E-mail Institucional
+        type: string
+      - name: ordem
+        label: Ordem de Exibição (1, 2, 3...)
+        type: number
+        default: 10
+      - name: ativo
+        label: Membro Ativo?
+        type: boolean
+        default: true

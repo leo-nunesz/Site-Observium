@@ -1,0 +1,193 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getEquipeAtiva } from '../../utils/content';
+
+const equipe = await getEquipeAtiva();
+---
+
+<BaseLayout title="Equipe | Observium UFRJ" description="Corpo docente, pesquisadores e colaboradores do Observatório de Vigilância e Uso de Medicamentos da Faculdade de Farmácia da UFRJ.">
+  <div class="page-header">
+    <div class="container">
+      <span class="badge">Institucional</span>
+      <h1 class="page-title">Equipe do Observium</h1>
+      <p class="page-subtitle">Docentes, pesquisadores e profissionais dedicados à segurança farmacoterapêutica</p>
+    </div>
+  </div>
+
+  <div class="container page-content">
+    <div class="team-grid">
+      {equipe.map((membro) => (
+        <article class="team-profile-card">
+          <div class="profile-header">
+            <div class="profile-avatar">
+              <span>{membro.data.nome.charAt(0)}</span>
+            </div>
+            <div class="profile-meta">
+              <h2 class="profile-name">{membro.data.nome}</h2>
+              <span class="profile-role">{membro.data.cargo}</span>
+              <p class="profile-degree">{membro.data.titulacao}</p>
+            </div>
+          </div>
+
+          <div class="profile-body">
+            <h3 class="profile-section-title">Áreas de Atuação:</h3>
+            <div class="profile-tags">
+              {membro.data.area_atuacao.map((area) => (
+                <span class="badge">{area}</span>
+              ))}
+            </div>
+
+            {membro.body && (
+              <p class="profile-bio">{membro.body}</p>
+            )}
+
+            <div class="profile-links">
+              {membro.data.lattes && (
+                <a href={membro.data.lattes} target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+                  Currículo Lattes &rarr;
+                </a>
+              )}
+              {membro.data.email && (
+                <a href={`mailto:${membro.data.email}`} class="profile-email">
+                  {membro.data.email}
+                </a>
+              )}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    color: #ffffff;
+    padding: var(--space-12) 0;
+    margin-bottom: var(--space-10);
+  }
+
+  .page-title {
+    color: #ffffff;
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+
+  .page-subtitle {
+    color: #cbd5e1;
+    font-size: 1.15rem;
+  }
+
+  .page-content {
+    padding-bottom: var(--space-16);
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: var(--space-8);
+  }
+
+  .team-profile-card {
+    background: #ffffff;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .team-profile-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .profile-header {
+    display: flex;
+    gap: var(--space-4);
+    align-items: flex-start;
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .profile-avatar {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    border-radius: var(--radius-full);
+    background-color: var(--color-primary-soft);
+    color: var(--color-primary);
+    font-family: var(--font-sans);
+    font-size: 1.6rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .profile-name {
+    font-size: 1.25rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .profile-role {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .profile-degree {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    line-height: 1.4;
+    margin-bottom: 0;
+  }
+
+  .profile-section-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-2);
+  }
+
+  .profile-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+
+  .profile-bio {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-6);
+  }
+
+  .profile-links {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .profile-email {
+    font-size: 0.85rem;
+    color: var(--color-primary);
+  }
+
+  .btn-sm {
+    padding: var(--space-2) var(--space-4);
+    font-size: 0.85rem;
+  }
+</style>
